@@ -1,0 +1,40 @@
+|relation
+|	|head
+|	|	|identifier = 'f'
+|	|body
+|	|	|disjunction
+|	|	|	|conjunction
+|	|	|	|	|atom
+|	|	|	|	|	|identifier = 'fffff'
+|	|	|	|	|	|identifier = 'fff'
+|	|	|	|	|conjunction
+|	|	|	|	|	|identifier = 'ffff'
+|	|	|	|	|	|conjunction
+|	|	|	|	|	|	|identifier = 'ffff'
+|	|	|	|	|	|	|conjunction
+|	|	|	|	|	|	|	|identifier = 'hello'
+|	|	|	|	|	|	|	|conjunction
+|	|	|	|	|	|	|	|	|atom
+|	|	|	|	|	|	|	|	|	|identifier = 'my'
+|	|	|	|	|	|	|	|	|	|identifier = 'friend'
+|	|	|	|	|	|	|	|	|conjunction
+|	|	|	|	|	|	|	|	|	|atom
+|	|	|	|	|	|	|	|	|	|	|identifier = 'how'
+|	|	|	|	|	|	|	|	|	|	|atom
+|	|	|	|	|	|	|	|	|	|	|	|identifier = 'are'
+|	|	|	|	|	|	|	|	|	|	|	|identifier = 'you'
+|	|	|	|	|	|	|	|	|	|	|atom
+|	|	|	|	|	|	|	|	|	|	|	|identifier = 'what'
+|	|	|	|	|	|	|	|	|	|	|	|identifier = 'are'
+|	|	|	|	|	|	|	|	|	|	|	|identifier = 'you'
+|	|	|	|	|	|	|	|	|	|	|	|identifier = 'doing'
+|	|	|	|	|	|	|	|	|	|identifier = 'h'
+|	|	|	|identifier = 'shdshdg'
+
+|relation
+|head
+|	|identifier = 'f'
+
+|relation
+|head
+|	|identifier = 'f'

@@ -1,0 +1,20 @@
+|relation
+|	|head
+|	|	|identifier = 'f'
+|	|body
+|	|	|disjunction
+|	|	|	|conjunction
+|	|	|	|	|identifier = 'first'
+|	|	|	|	|identifier = 'second'
+|	|	|	|conjunction
+|	|	|	|	|identifier = 'third'
+|	|	|	|	|conjunction
+|	|	|	|	|	|atom
+|	|	|	|	|	|	|identifier = 'extra'
+|	|	|	|	|	|	|atom
+|	|	|	|	|	|	|	|identifier = 'hello'
+|	|	|	|	|	|	|	|atom
+|	|	|	|	|	|	|	|	|atom
+|	|	|	|	|	|	|	|	|	|identifier = 'world'
+|	|	|	|	|	|	|identifier = 'wot'
+|	|	|	|	|	|identifier = 'he'

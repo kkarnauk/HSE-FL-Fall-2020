@@ -1,0 +1,8 @@
+f:-f.
+
+
+f :- f, (f, f, f); (f; (f; (f, g, f (ff) (ff)))).
+
+f:-fdsdsdsdssd, ddfd (
+sdasd (sads )
+).

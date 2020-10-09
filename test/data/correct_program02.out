@@ -1,0 +1,20 @@
+|relation
+|	|head
+|	|	|atom
+|	|	|	|identifier = 'f'
+|	|	|	|identifier = 'f'
+|	|	|	|identifier = 'f'
+|	|body
+|	|	|disjunction
+|	|	|	|conjunction
+|	|	|	|	|identifier = 'f'
+|	|	|	|	|conjunction
+|	|	|	|	|	|identifier = 'g'
+|	|	|	|	|	|identifier = 'f'
+|	|	|	|disjunction
+|	|	|	|	|conjunction
+|	|	|	|	|	|identifier = 'fff'
+|	|	|	|	|	|conjunction
+|	|	|	|	|	|	|identifier = 'dd'
+|	|	|	|	|	|	|identifier = 'f'
+|	|	|	|	|identifier = 'f'

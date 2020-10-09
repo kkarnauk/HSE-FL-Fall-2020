@@ -1,0 +1,77 @@
+|relation
+|head
+|	|identifier = 'f'
+
+|relation
+|head
+|	|identifier = 'f'
+
+|relation
+|head
+|	|identifier = 'f'
+
+|relation
+|	|head
+|	|	|atom
+|	|	|	|identifier = 'g'
+|	|	|	|identifier = 'f'
+|	|	|	|atom
+|	|	|	|	|identifier = 'ffdfjsh'
+|	|	|	|identifier = 'sdas'
+|	|	|	|identifier = 'sda'
+|	|body
+|	|	|identifier = 'd'
+
+|relation
+|	|head
+|	|	|identifier = 'f'
+|	|body
+|	|	|disjunction
+|	|	|	|conjunction
+|	|	|	|	|identifier = 'g'
+|	|	|	|	|conjunction
+|	|	|	|	|	|identifier = 'g'
+|	|	|	|	|	|conjunction
+|	|	|	|	|	|	|identifier = 'g'
+|	|	|	|	|	|	|atom
+|	|	|	|	|	|	|	|identifier = 'ggg'
+|	|	|	|	|	|	|	|identifier = 'g'
+|	|	|	|	|	|	|	|identifier = 'g'
+|	|	|	|	|	|	|	|identifier = 'g'
+|	|	|	|disjunction
+|	|	|	|	|atom
+|	|	|	|	|	|identifier = 'sdsada'
+|	|	|	|	|	|atom
+|	|	|	|	|	|	|identifier = 'sdasd'
+|	|	|	|	|	|identifier = 'sdsad'
+|	|	|	|	|	|atom
+|	|	|	|	|	|	|identifier = 'sdasd'
+|	|	|	|	|conjunction
+|	|	|	|	|	|identifier = 'sfsdf'
+|	|	|	|	|	|conjunction
+|	|	|	|	|	|	|atom
+|	|	|	|	|	|	|	|identifier = 'dfsdfsd'
+|	|	|	|	|	|	|	|atom
+|	|	|	|	|	|	|	|	|identifier = 'ssdf'
+|	|	|	|	|	|	|disjunction
+|	|	|	|	|	|	|	|identifier = 'sdsf'
+|	|	|	|	|	|	|	|disjunction
+|	|	|	|	|	|	|	|	|identifier = 'sfs'
+|	|	|	|	|	|	|	|	|disjunction
+|	|	|	|	|	|	|	|	|	|identifier = 'fsdf'
+|	|	|	|	|	|	|	|	|	|identifier = 'f'
+
+|relation
+|	|head
+|	|	|atom
+|	|	|	|identifier = 'f'
+|	|	|	|atom
+|	|	|	|	|atom
+|	|	|	|	|	|atom
+|	|	|	|	|	|	|identifier = 'f'
+|	|body
+|	|	|atom
+|	|	|	|identifier = 'f'
+|	|	|	|atom
+|	|	|	|	|identifier = 'ff'
+|	|	|	|	|identifier = 'f'

@@ -1,0 +1,45 @@
+|relation
+|	|head
+|	|	|identifier = 'f'
+|	|body
+|	|	|identifier = 'f'
+
+|relation
+|	|head
+|	|	|identifier = 'f'
+|	|body
+|	|	|disjunction
+|	|	|	|conjunction
+|	|	|	|	|identifier = 'f'
+|	|	|	|	|conjunction
+|	|	|	|	|	|identifier = 'f'
+|	|	|	|	|	|conjunction
+|	|	|	|	|	|	|identifier = 'f'
+|	|	|	|	|	|	|identifier = 'f'
+|	|	|	|disjunction
+|	|	|	|	|identifier = 'f'
+|	|	|	|	|disjunction
+|	|	|	|	|	|identifier = 'f'
+|	|	|	|	|	|conjunction
+|	|	|	|	|	|	|identifier = 'f'
+|	|	|	|	|	|	|conjunction
+|	|	|	|	|	|	|	|identifier = 'g'
+|	|	|	|	|	|	|	|atom
+|	|	|	|	|	|	|	|	|identifier = 'f'
+|	|	|	|	|	|	|	|	|atom
+|	|	|	|	|	|	|	|	|	|identifier = 'ff'
+|	|	|	|	|	|	|	|	|atom
+|	|	|	|	|	|	|	|	|	|identifier = 'ff'
+
+|relation
+|	|head
+|	|	|identifier = 'f'
+|	|body
+|	|	|conjunction
+|	|	|	|identifier = 'fdsdsdsdssd'
+|	|	|	|atom
+|	|	|	|	|identifier = 'ddfd'
+|	|	|	|	|atom
+|	|	|	|	|	|identifier = 'sdasd'
+|	|	|	|	|	|atom
+|	|	|	|	|	|	|identifier = 'sads'

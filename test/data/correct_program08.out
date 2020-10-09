@@ -1,0 +1,35 @@
+|relation
+|	|head
+|	|	|atom
+|	|	|	|identifier = 'a'
+|	|	|	|atom
+|	|	|	|	|identifier = 'a'
+|	|body
+|	|	|identifier = 'a'
+
+|relation
+|	|head
+|	|	|atom
+|	|	|	|identifier = 'a'
+|	|	|	|atom
+|	|	|	|	|identifier = 'a'
+|	|	|	|	|atom
+|	|	|	|	|	|identifier = 'a'
+|	|	|	|	|atom
+|	|	|	|	|	|identifier = 'a'
+|	|	|	|	|	|identifier = 'a'
+|	|body
+|	|	|identifier = 'a'
+
+|relation
+|	|head
+|	|	|identifier = 'a'
+|	|body
+|	|	|atom
+|	|	|	|identifier = 'aaa'
+|	|	|	|atom
+|	|	|	|	|identifier = 'aaa'
+|	|	|	|	|atom
+|	|	|	|	|	|identifier = 'aaa'
+|	|	|	|atom
+|	|	|	|	|identifier = 'aaaaa'
