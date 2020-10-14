@@ -1,3 +1,5 @@
+{-# LANGUAGE FlexibleContexts #-}
+
 module PrologParser where
 
 import Control.Monad
@@ -15,7 +17,8 @@ languageDef =
            }
 
 
-parsePrologProgram = parse (do r <- parseProgram; eof; return r) ""
+parseExpr parser = parse (do r <- parser; eof; return r) ""
+parsePrologProgram = parseExpr parseProgram
 
 
 lexer = Token.makeTokenParser languageDef
