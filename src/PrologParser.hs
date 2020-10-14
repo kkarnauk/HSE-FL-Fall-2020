@@ -15,7 +15,7 @@ languageDef =
            }
 
 
-parsePrologProgram = parse (do r <- parseAnyList; eof; return r) ""
+parsePrologProgram = parse (do r <- parseProgram; eof; return r) ""
 
 
 lexer = Token.makeTokenParser languageDef
