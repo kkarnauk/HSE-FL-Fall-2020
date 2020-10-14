@@ -69,22 +69,33 @@ parseAtomArgs = try $ many parseAtomArg
 
 parseAtomArg :: Parser Arg
 parseAtomArg = try (parens parseAtomArg)          <|>
-  fmap AList (try parseAnyList)                   <|>
+  fmap AAtom (try parseAnyList)                   <|>
   fmap AAtom (try (parens parseAtom))             <|>
   fmap (\x -> AAtom (Atom x [])) (try identifier) <|>
   fmap AVar (try variable) 
 
-parseAnyList :: Parser AnyList
-parseAnyList = fmap RList (try parseList) <|>
-  fmap RListHT (try parseListHT)
+consAtom = Atom (Identifier "cons")
+nilAtom = Atom (Identifier "nil") []
+
+data List = List [Arg]
+data ListHT = ListHT Arg Variable
+
+fromListToAtom :: List -> Atom
+fromListToAtom (List list) = foldr (\x y -> consAtom [x, AAtom y]) nilAtom list
+
+fromListHTToAtom :: ListHT -> Atom
+fromListHTToAtom (ListHT head tail) = consAtom [head, AVar tail]
+
+parseAnyList :: Parser Atom
+parseAnyList = (try parseList) <|> (try parseListHT)
 
 parseListArg :: Parser Arg
 parseListArg = fmap AAtom (try parseAtom) <|>
-  fmap AList (try parseAnyList) <|>
+  fmap AAtom (try parseAnyList) <|>
   fmap AVar (try variable)
 
-parseList :: Parser List
-parseList = fmap List $ try $ braces (
+parseList :: Parser Atom
+parseList = fmap (fromListToAtom . List) $ try $ braces (
     try (parseSequence parseListArg (reservedOp ",")) <|>
     try (do 
       spaces
@@ -92,8 +103,8 @@ parseList = fmap List $ try $ braces (
     )
   )
 
-parseListHT :: Parser ListHT
-parseListHT = try $ braces (do
+parseListHT :: Parser Atom
+parseListHT = fmap fromListHTToAtom $ try $ braces (do
     head <- parseListArg
     _    <- reservedOp "|"
     tail <- variable

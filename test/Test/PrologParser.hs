@@ -118,20 +118,23 @@ ta' = TAtom a'
 tb' = TAtom b'
 tc' = TAtom c'
 
+consAtomA x = AAtom $ consAtom x
+nilAtomA = AAtom $ nilAtom
+
 unit_list :: Assertion
 unit_list = do
   let parser = parseList
   let success = testParserSuccess parser
   let fail  = testParserFailure parser
-  success "[]" (List [])
-  success "[  \t\t\n \n]" (List [])
-  success "[a X a]" (List [AAtom $ a [AVar vx, AAtom a']])
-  success "[a, b, c]" (List [AAtom a', AAtom b', AAtom c'])
-  success "[a, b c, a]" (List [AAtom a', AAtom $ b [AAtom c'], AAtom a'])
-  success "[[]\t\t]" (List [AList $ RList $ List []])
-  success "[[a, b], X]" (List [AList $ RList $ List [AAtom a', AAtom b'], AVar vx])
-  success "[[], [], [X]]" (List [AList $ RList $ List [], AList $ RList $ List [], AList $ RList $ List [AVar vx]])
-  success "[[X | \n\nY], a]" (List [AList $ RListHT $ ListHT (AVar vx) vy, AAtom a'])
+  success "[]" nilAtom
+  success "[  \t\t\n \n]" nilAtom
+  success "[a X a]" (consAtom [AAtom $ a [AVar vx, AAtom a'], nilAtomA])
+  success "[a, b, c]" (consAtom [AAtom a', consAtomA [AAtom b', consAtomA [AAtom c', nilAtomA]]])
+  success "[a, b c, a]" (consAtom [AAtom a', consAtomA [AAtom $ b [AAtom c'], consAtomA [AAtom a', nilAtomA]]])
+  success "[[]\t\t]" (consAtom [nilAtomA, nilAtomA])
+  success "[[a, b], X]" (consAtom [consAtomA [AAtom a', consAtomA [AAtom b', nilAtomA]], consAtomA [AVar vx, nilAtomA]])
+  success "[[], [], [X]]" (consAtom [nilAtomA, consAtomA[nilAtomA, consAtomA [consAtomA [AVar vx, nilAtomA], nilAtomA]]])
+  success "[[X | \n\nY], a]" (consAtom [consAtomA [AVar vx, AVar vy], consAtomA [AAtom a', nilAtomA]])
   fail "[a, b, c"
   fail "[)"
   fail "[a, B; c]"
@@ -144,9 +147,9 @@ unit_listHT = do
   let parser = parseListHT
   let success = testParserSuccess parser
   let fail  = testParserFailure parser
-  success "[X \t| Y]" (ListHT (AVar vx) vy)
-  success "[a X ((c\n)) | Y]" (ListHT (AAtom $ a [AVar vx, AAtom c']) vy)
-  success "[[a\n, b] | X]" (ListHT (AList $ RList $ List [AAtom a', AAtom b']) vx)
+  success "[X \t| Y]" (consAtom [AVar vx, AVar vy])
+  success "[a X ((c\n)) | Y]" (consAtom [AAtom $ a [AVar vx, AAtom c'], AVar vy])
+  success "[[a\n, b] | X]" (consAtom [consAtomA [AAtom a', consAtomA [AAtom b', nilAtomA]], AVar vx])
   fail "[H | T | C]"
   fail "[X | ]"
   fail "[F | a]"
@@ -158,10 +161,10 @@ unit_atom_list = do
   let parser = parseAtom
   let success = testParserSuccess parser
   let fail  = testParserFailure parser
-  success "a [] []" (a [AList $ RList $ List [], AList $ RList $ List []])
-  success "a [a, b ([a, b]), c] (a [b | X]) [[] | X]"
-    (a [AList $ RList $ List [AAtom a', AAtom $ b [AList $ RList $ List [AAtom a', AAtom b']], AAtom c'], 
-      AAtom $ a [AList $ RListHT $ ListHT (AAtom b') vx], AList $ RListHT $ ListHT (AList $ RList $ List []) vx])
+  success "a [] []" (a [nilAtomA, nilAtomA])
+  success "a [a, b ([a, b]), c] [[] | X]"
+    (a [consAtomA [AAtom a', consAtomA [AAtom $ b [consAtomA [AAtom a', consAtomA [AAtom b', nilAtomA]]], consAtomA [AAtom c', nilAtomA]]], 
+      consAtomA [nilAtomA, AVar vx]])
   fail "[X | Y] b"
   fail "[a, b] a"
   fail "[]"
@@ -217,7 +220,7 @@ unit_conjunction = do
   let success = testParserSuccess parser
   let fail  = testParserFailure parser
   success "a, b, \n\nc" (Conj (RAtom a') (Conj (RAtom b') (RAtom c')))
-  success "a, (b c [X])" (Conj (RAtom a') (RAtom $ b [AAtom c', AList $ RList $ List [AVar vx]]))
+  success "a, (b c [X])" (Conj (RAtom a') (RAtom $ b [AAtom c', consAtomA [AVar vx, nilAtomA]]))
   fail "a, b,"
   fail ", a, b"
   fail "a, b (a, c)"
@@ -229,7 +232,7 @@ unit_disjunction = do
   let success = testParserSuccess parser
   let fail  = testParserFailure parser
   success "a ; b ;   \n c\n" (Disj (RAtom a') (Disj (RAtom b') (RAtom c')))
-  success "a, (b, c; a [X])" (Conj (RAtom a') (Disj (Conj (RAtom b') (RAtom c')) (RAtom $ a [AList $ RList $ List [AVar vx]])))
+  success "a, (b, c; a [X])" (Conj (RAtom a') (Disj (Conj (RAtom b') (RAtom c')) (RAtom $ a [consAtomA [AVar vx, nilAtomA]])))
   fail "a;"
   fail "a ; b ; (; c)"
   fail "a, b, ; c"
