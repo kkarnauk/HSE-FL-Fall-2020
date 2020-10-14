@@ -16,8 +16,20 @@ newtype Variable = Variable String
 newtype Identifier = Identifier String
                    deriving (Eq, Show)
 
-data List = List
+data Arg = AAtom Atom
+         | AList AnyList
+         | AVar Variable
+         deriving (Eq, Show)
+
+data AnyList = RList List
+             | RListHT ListHT
+             deriving (Eq, Show)
+
+data List = List [Arg]
           deriving (Eq, Show)
+
+data ListHT = ListHT Arg Variable
+            deriving (Eq, Show)
 
 data PrologProgram = Program {
         pModule :: Maybe Identifier
@@ -34,13 +46,8 @@ data Type = TVar Variable
           | Arrow Type Type
           deriving (Eq, Show)
 
-data AtomArg = AAtom Atom
-             | AList List
-             | AVar Variable
-             deriving (Eq, Show)
 
-
-data Atom = Atom { atomHead :: Identifier, atomArgs :: [AtomArg] }
+data Atom = Atom { atomHead :: Identifier, atomArgs :: [Arg] }
           deriving (Eq, Show)
 
 data Relation = Relation { relHead :: Atom, relBody :: Maybe RelationBody }

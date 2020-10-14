@@ -118,6 +118,55 @@ ta' = TAtom a'
 tb' = TAtom b'
 tc' = TAtom c'
 
+unit_list :: Assertion
+unit_list = do
+  let parser = parseList
+  let success = testParserSuccess parser
+  let fail  = testParserFailure parser
+  success "[]" (List [])
+  success "[  \t\t\n \n]" (List [])
+  success "[a X a]" (List [AAtom $ a [AVar vx, AAtom a']])
+  success "[a, b, c]" (List [AAtom a', AAtom b', AAtom c'])
+  success "[a, b c, a]" (List [AAtom a', AAtom $ b [AAtom c'], AAtom a'])
+  success "[[]\t\t]" (List [AList $ RList $ List []])
+  success "[[a, b], X]" (List [AList $ RList $ List [AAtom a', AAtom b'], AVar vx])
+  success "[[], [], [X]]" (List [AList $ RList $ List [], AList $ RList $ List [], AList $ RList $ List [AVar vx]])
+  success "[[X | \n\nY], a]" (List [AList $ RListHT $ ListHT (AVar vx) vy, AAtom a'])
+  fail "[a, b, c"
+  fail "[)"
+  fail "[a, B; c]"
+  fail "[aa (aa), [], [], ]" 
+  fail "[, b]"
+  fail "[a, , b]"
+
+unit_listHT :: Assertion
+unit_listHT = do
+  let parser = parseListHT
+  let success = testParserSuccess parser
+  let fail  = testParserFailure parser
+  success "[X \t| Y]" (ListHT (AVar vx) vy)
+  success "[a X ((c\n)) | Y]" (ListHT (AAtom $ a [AVar vx, AAtom c']) vy)
+  success "[[a\n, b] | X]" (ListHT (AList $ RList $ List [AAtom a', AAtom b']) vx)
+  fail "[H | T | C]"
+  fail "[X | ]"
+  fail "[F | a]"
+  fail "[X | Y"
+  fail "|Y]"
+
+unit_atom_list :: Assertion
+unit_atom_list = do
+  let parser = parseAtom
+  let success = testParserSuccess parser
+  let fail  = testParserFailure parser
+  success "a [] []" (a [AList $ RList $ List [], AList $ RList $ List []])
+  success "a [a, b ([a, b]), c] (a [b | X]) [[] | X]"
+    (a [AList $ RList $ List [AAtom a', AAtom $ b [AList $ RList $ List [AAtom a', AAtom b']], AAtom c'], 
+      AAtom $ a [AList $ RListHT $ ListHT (AAtom b') vx], AList $ RListHT $ ListHT (AList $ RList $ List []) vx])
+  fail "[X | Y] b"
+  fail "[a, b] a"
+  fail "[]"
+  fail "a [b, c"
+
 unit_type :: Assertion
 unit_type = do
   let parser = parseType
@@ -208,7 +257,7 @@ unit_program = do
           "\ntype \n typeName    X\t\t\t -> \no\n\n." ++
           "type typeName2 Y -> X.\n\n\n\n" ++
           "typeName2 \n\n\n typeName\t\t\t :-\t\t\t a \t(\nX) \t(f f)\n\n\n,\n\n\n f, (f; f)." ++
-          "a \n\n\n(b a (\ta)\n\n) :- a a \n(\na a \t(a \na))\t, (a)\n; \nb; (a, b).") 
+          "a \n\n\n(b a (\ta)\n\n) :- a a \n(\na a \t(a \na))\t, (a)\n; \nb; (a, b).\n\n\n") 
           (Program (Just $ Identifier "example") 
             [
               (TypeDef (Identifier "typeName") (Arrow (TVar vx) (TAtom atomo))),

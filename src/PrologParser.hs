@@ -11,11 +11,11 @@ languageDef =
   emptyDef { Token.identStart = lower
            , Token.identLetter = alphaNum <|> char '_'
            , Token.reservedNames = ["module", "type"]
-           , Token.reservedOpNames = [",", ";", "->", ":-"]
+           , Token.reservedOpNames = [",", ";", "->", ":-", "|"]
            }
 
 
-parsePrologProgram = parse (do r <- parseProgram; eof; return r) ""
+parsePrologProgram = parse (do r <- parseAnyList; eof; return r) ""
 
 
 lexer = Token.makeTokenParser languageDef
@@ -38,7 +38,7 @@ whiteSpace = Token.whiteSpace lexer
 reservedOp = Token.reservedOp lexer
 reserved = Token.reserved lexer
 parens = Token.parens lexer
-braces = Token.braces lexer
+braces = Token.squares lexer
 dot = Token.dot lexer
 
 
@@ -61,14 +61,42 @@ parseAtom = try $ do
   args <- parseAtomArgs
   return (Atom head args)
 
-parseAtomArgs :: Parser [AtomArg]
+parseAtomArgs :: Parser [Arg]
 parseAtomArgs = try $ many parseAtomArg
 
-parseAtomArg :: Parser AtomArg
+parseAtomArg :: Parser Arg
 parseAtomArg = try (parens parseAtomArg)          <|>
+  fmap AList (try parseAnyList)                   <|>
   fmap AAtom (try (parens parseAtom))             <|>
   fmap (\x -> AAtom (Atom x [])) (try identifier) <|>
   fmap AVar (try variable) 
+
+parseAnyList :: Parser AnyList
+parseAnyList = fmap RList (try parseList) <|>
+  fmap RListHT (try parseListHT)
+
+parseListArg :: Parser Arg
+parseListArg = fmap AAtom (try parseAtom) <|>
+  fmap AList (try parseAnyList) <|>
+  fmap AVar (try variable)
+
+parseList :: Parser List
+parseList = fmap List $ try $ braces (
+    try (parseSequence parseListArg (reservedOp ",")) <|>
+    try (do 
+      spaces
+      return []
+    )
+  )
+
+parseListHT :: Parser ListHT
+parseListHT = try $ braces (do
+    head <- parseListArg
+    _    <- reservedOp "|"
+    tail <- variable
+    return (ListHT head tail)
+  )
+
 
 parseType :: Parser Type
 parseType = fmap (foldr1 Arrow) $ try $ parseSequence parseTypeArg (reservedOp "->")
