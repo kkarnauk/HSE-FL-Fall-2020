@@ -211,6 +211,30 @@ unit_typeDef = do
   fail "type (x -> y) x -> y."
   fail "type x o"
 
+unit_conjunction :: Assertion
+unit_conjunction = do
+  let parser = parseConjunction
+  let success = testParserSuccess parser
+  let fail  = testParserFailure parser
+  success "a, b, \n\nc" (Conj (RAtom a') (Conj (RAtom b') (RAtom c')))
+  success "a, (b c [X])" (Conj (RAtom a') (RAtom $ b [AAtom c', AList $ RList $ List [AVar vx]]))
+  fail "a, b,"
+  fail ", a, b"
+  fail "a, b (a, c)"
+  fail "a ,, c"
+
+unit_disjunction :: Assertion
+unit_disjunction = do
+  let parser = parseDisjunction
+  let success = testParserSuccess parser
+  let fail  = testParserFailure parser
+  success "a ; b ;   \n c\n" (Disj (RAtom a') (Disj (RAtom b') (RAtom c')))
+  success "a, (b, c; a [X])" (Conj (RAtom a') (Disj (Conj (RAtom b') (RAtom c')) (RAtom $ a [AList $ RList $ List [AVar vx]])))
+  fail "a;"
+  fail "a ; b ; (; c)"
+  fail "a, b, ; c"
+  fail "a ;; b"
+
 unit_relation :: Assertion
 unit_relation = do
   let parser = parseRelation
