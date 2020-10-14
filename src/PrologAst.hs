@@ -66,6 +66,7 @@ instance Show Arg where
   show (AVar var)   = show var
 
 instance Show Atom where
+  show (Atom head []) = show head
   show (Atom head args) = "|Atom\n" ++ (ident ++ show head ++ "\n") ++ (intercalate "\n" $ map (applyIdent . show) args)
 
 instance Show Type where
@@ -86,10 +87,9 @@ instance Show RelationBody where
   show (Conj first second) = "|Conj\n" ++ (applyIdent $ show first) ++ "\n" ++ (applyIdent $ show second)
   show (Disj first second) = "|Disj\n" ++ (applyIdent $ show first) ++ "\n" ++ (applyIdent $ show second)
 
-
 instance Show PrologProgram where
   show (Program pModule types rels) = "|Program\n" ++
     (ident ++ "|Module\n")   ++ ident ++ ident ++ (case pModule of { Nothing -> "Nothing"; Just name -> show name }) ++ "\n" ++
     (ident ++ "|TypeDefs\n")  ++ (concatMap ((++ "\n") . applyIdent . applyIdent . show) types) ++ 
     (ident ++ "|Relations\n") ++ (concatMap ((++ "\n") . applyIdent . applyIdent . show) rels)
-    
+
