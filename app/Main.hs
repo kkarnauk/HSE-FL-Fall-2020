@@ -11,10 +11,10 @@ runParser parser str =
     Left err -> print err
     Right r -> print r
 
-parseFromFile :: FilePath -> IO ()
-parseFromFile path = do
+-- parseFromFile :: FilePath -> IO ()
+parseFromFile path parser = do
   input <- readFile path
-  case parsePrologProgram input of
+  case parseExpr parser input of
     Left err -> print err
     Right r -> do
       writeFile (path ++ ".out") (show r)
@@ -23,34 +23,24 @@ parseFromFile path = do
 main :: IO ()
 main = do
   args <- getArgs
-  let command = (args !! 1)
-  case command of
-    "--atom" -> (do 
-        input <- getContents
-        runParser parseAtom input
-      )
-    "--typeexpr" -> (do
-        input <- getContents
-        runParser parseType input
-      )
-    "--type" -> (do
-        input <- getContents
-        runParser parseTypeDef input
-      )
-    "--module" -> (do
-        input <- getContents
-        runParser parseModule input
-      )
-    "--relation" -> (do
-        input <- getContents
-        runParser parseRelation input
-      )
-    "--list" -> (do
-        input <- getContents
-        runParser parseAnyList input
-      )
-    "--prog" -> (do
-        input <- getContents
-        runParser parseProgram input
-      )
-    _ -> parseFromFile command
+  let filename = (args !! 1)
+
+  if length args < 3 then
+    parseFromFile filename parseProgram
+  else
+    case (args !! 2) of
+      "--atom" ->
+          parseFromFile filename parseAtom
+      "--typeexpr" ->
+          parseFromFile filename parseType
+      "--type" ->
+          parseFromFile filename parseTypeDef
+      "--module" ->
+          parseFromFile filename parseModule
+      "--relation" ->
+          parseFromFile filename parseRelation
+      "--list" ->
+          parseFromFile filename parseAnyList
+      "--prog" ->
+          parseFromFile filename parseProgram
+          
