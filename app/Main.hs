@@ -33,6 +33,10 @@ main = do
         input <- getContents
         runParser parseType input
       )
+    "--type" -> (do
+        input <- getContents
+        runParser parseTypeDef input
+      )
     "--module" -> (do
         input <- getContents
         runParser parseModule input
@@ -43,7 +47,7 @@ main = do
       )
     "--list" -> (do
         input <- getContents
-        runParser parseList input
+        runParser parseAnyList input
       )
     "--prog" -> (do
         input <- getContents
