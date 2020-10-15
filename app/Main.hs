@@ -23,24 +23,25 @@ parseFromFile path parser = do
 main :: IO ()
 main = do
   args <- getArgs
-  let filename = (args !! 1)
 
-  if length args < 3 then
+  if length args < 3 then do
+    let filename = (args !! 1)
     parseFromFile filename parseProgram
-  else
-    case (args !! 2) of
-      "--atom" ->
+  else do
+    let filename = (args !! 2)
+    case args !! 1 of
+      "atom" ->
           parseFromFile filename parseAtom
-      "--typeexpr" ->
+      "typeexpr" ->
           parseFromFile filename parseType
-      "--type" ->
+      "type" ->
           parseFromFile filename parseTypeDef
-      "--module" ->
+      "module" ->
           parseFromFile filename parseModule
-      "--relation" ->
+      "relation" ->
           parseFromFile filename parseRelation
-      "--list" ->
+      "list" ->
           parseFromFile filename parseAnyList
-      "--prog" ->
+      "prog" ->
           parseFromFile filename parseProgram
           
