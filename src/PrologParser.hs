@@ -59,10 +59,11 @@ parseModule = try $ do
 
 
 parseAtom :: Parser Atom
-parseAtom = try $ do
-  head <- identifier
-  args <- parseAtomArgs
-  return (Atom head args)
+parseAtom = try (do
+    head <- identifier
+    args <- parseAtomArgs
+    return (Atom head args)
+  ) <|> parseAnyList
 
 parseAtomArgs :: Parser [Arg]
 parseAtomArgs = try $ many parseAtomArg

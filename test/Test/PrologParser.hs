@@ -155,6 +155,7 @@ unit_listHT = do
   fail "[F | a]"
   fail "[X | Y"
   fail "|Y]"
+  fail "[a, b | X]"
 
 unit_atom_list :: Assertion
 unit_atom_list = do
@@ -165,9 +166,11 @@ unit_atom_list = do
   success "a [a, b ([a, b]), c] [[] | X]"
     (a [consAtomA [AAtom a', consAtomA [AAtom $ b [consAtomA [AAtom a', consAtomA [AAtom b', nilAtomA]]], consAtomA [AAtom c', nilAtomA]]], 
       consAtomA [nilAtomA, AVar vx]])
+  success "[]" nilAtom
+  success "[a, b]" (consAtom [AAtom a', consAtomA [AAtom b', nilAtomA]])
+  success "[a | X]" (consAtom [AAtom a', AVar vx])
   fail "[X | Y] b"
   fail "[a, b] a"
-  fail "[]"
   fail "a [b, c"
 
 unit_type :: Assertion
@@ -221,6 +224,7 @@ unit_conjunction = do
   let fail  = testParserFailure parser
   success "a, b, \n\nc" (Conj (RAtom a') (Conj (RAtom b') (RAtom c')))
   success "a, (b c [X])" (Conj (RAtom a') (RAtom $ b [AAtom c', consAtomA [AVar vx, nilAtomA]]))
+  success "a, [X], b" (Conj (RAtom a') (Conj (RAtom $ consAtom [AVar vx, nilAtomA]) (RAtom b')))
   fail "a, b,"
   fail ", a, b"
   fail "a, b (a, c)"
@@ -233,10 +237,12 @@ unit_disjunction = do
   let fail  = testParserFailure parser
   success "a ; b ;   \n c\n" (Disj (RAtom a') (Disj (RAtom b') (RAtom c')))
   success "a, (b, c; a [X])" (Conj (RAtom a') (Disj (Conj (RAtom b') (RAtom c')) (RAtom $ a [consAtomA [AVar vx, nilAtomA]])))
+  success "[a, b]; [], c" (Disj (RAtom $ consAtom [AAtom a', consAtomA [AAtom b', nilAtomA]]) (Conj (RAtom nilAtom) (RAtom c')))
   fail "a;"
   fail "a ; b ; (; c)"
   fail "a, b, ; c"
   fail "a ;; b"
+  fail "a; [] a; b"
 
 unit_relation :: Assertion
 unit_relation = do
@@ -256,6 +262,8 @@ unit_relation = do
   success "a b:- a,b,c." (Relation (a [AAtom b']) (Just (Conj (RAtom a') (Conj (RAtom b') (RAtom c')))))
   success "a (b (c))  :- (a b) ." (Relation (a [AAtom $ b [AAtom c']]) (Just (RAtom (a [AAtom b']))))
   success "a :- a (((a))) X." (Relation a' (Just $ RAtom $ a [AAtom a', (AVar vx)]))
+  success "[a]." (Relation (consAtom [AAtom a', nilAtomA]) Nothing)
+  success "a :- [a]." (Relation a' (Just $ RAtom $ consAtom [AAtom a', nilAtomA]))
   fail "(a) :- a."
   fail ":- a."
   fail "f :- f"
@@ -269,6 +277,7 @@ unit_relation = do
   fail "a :- (a) X."
   fail "f :- ."
   fail "X."
+  fail "a :- [] []."
 
 unit_program :: Assertion
 unit_program = do
